@@ -34,22 +34,22 @@ public class Tuple4<T1, T2, T3, T4> implements Value4<T1, T2, T3, T4> {
     }
 
     public <R, E extends Exception> Tuple4<R, T2, T3, T4> map1(Function1<T1, R, E> function) throws E {
-        R result = Exceptions.requireFunction(function).apply(value1);
+        R result = value1 == null ? null : Exceptions.requireFunction(function).apply(value1);
         return Tuple4.of(result, value2, value3, value4);
     }
 
     public <R, E extends Exception> Tuple4<T1, R, T3, T4> map2(Function1<T2, R, E> function) throws E {
-        R result = Exceptions.requireFunction(function).apply(value2);
+        R result = value2 == null ? null : Exceptions.requireFunction(function).apply(value2);
         return Tuple4.of(value1, result, value3, value4);
     }
 
     public <R, E extends Exception> Tuple4<T1, T2, R, T4> map3(Function1<T3, R, E> function) throws E {
-        R result = Exceptions.requireFunction(function).apply(value3);
+        R result = value3 == null ? null : Exceptions.requireFunction(function).apply(value3);
         return Tuple4.of(value1, value2, result, value4);
     }
 
     public <R, E extends Exception> Tuple4<T1, T2, T3, R> map4(Function1<T4, R, E> function) throws E {
-        R result = Exceptions.requireFunction(function).apply(value4);
+        R result = value4 == null ? null : Exceptions.requireFunction(function).apply(value4);
         return Tuple4.of(value1, value2, value3, result);
     }
 

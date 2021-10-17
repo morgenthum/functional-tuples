@@ -2,7 +2,6 @@ package dev.morgenthum.tuple;
 
 import dev.morgenthum.tuple.function.Consumer1;
 import dev.morgenthum.tuple.function.Function1;
-import dev.morgenthum.tuple.function.Function2;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -23,15 +22,16 @@ public class Unit<T1> implements Value1<T1> {
         this.value1 = value1;
     }
 
-    public <R1, E extends Exception> Unit<R1> map(Function1<T1, R1, E> function) throws E {
+    public <R, E extends Exception> Unit<R> map(Function1<T1, R, E> function) throws E {
         return map1(function);
     }
 
-    public <R1, E extends Exception> Unit<R1> map1(Function1<T1, R1, E> function) throws E {
-        return Unit.of(Exceptions.requireFunction(function).apply(value1));
+    public <R, E extends Exception> Unit<R> map1(Function1<T1, R, E> function) throws E {
+        R result = value1 == null ? null : Exceptions.requireFunction(function).apply(value1);
+        return Unit.of(result);
     }
 
-    public <R1, E extends Exception> Unit<R1> mapTuple(Function1<T1, Unit<R1>, E> function) throws E {
+    public <R, E extends Exception> Unit<R> mapTuple(Function1<T1, Unit<R>, E> function) throws E {
         return Exceptions.requireFunction(function).apply(value1);
     }
 

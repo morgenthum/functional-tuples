@@ -44,11 +44,11 @@ public class ComplexTest {
 
         Order exampleOrder = buildCrossfieldValidationOrder();
 
-        Unit.of(exampleOrder)
-            .map1(Order::getCustomer)
-            .unfold(Customer::getAddress)
-            .map1(Customer::getNumber)
-            .map2(Address::getCity)
+        Unit.of(exampleOrder) // Unit<Order>
+            .map1(Order::getCustomer) // Unit<Customer>
+            .unfold(Customer::getAddress) // Tuple<Customer, Address>
+            .map1(Customer::getNumber) // Tuple<String, Address>
+            .map2(Address::getCity) // Tuple<String, String>
             .ifPresent((customerNo, city) -> {
                 valid.set("1337".equals(customerNo) && "Coburg".equals(city));
             });
