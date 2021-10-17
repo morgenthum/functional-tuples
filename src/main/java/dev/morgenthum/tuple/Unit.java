@@ -2,6 +2,7 @@ package dev.morgenthum.tuple;
 
 import dev.morgenthum.tuple.function.Consumer1;
 import dev.morgenthum.tuple.function.Function1;
+import dev.morgenthum.tuple.function.Function2;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -12,6 +13,10 @@ public class Unit<T1> implements Value1<T1> {
         return new Unit<>(value);
     }
 
+    public static <T1> T1 first(T1 value1) {
+        return value1;
+    }
+
     private final T1 value1;
 
     private Unit(T1 value1) {
@@ -19,17 +24,26 @@ public class Unit<T1> implements Value1<T1> {
     }
 
     public <R1, E extends Exception> Unit<R1> map(Function1<T1, R1, E> function) throws E {
+        return map1(function);
+    }
+
+    public <R1, E extends Exception> Unit<R1> map1(Function1<T1, R1, E> function) throws E {
         return Unit.of(Exceptions.requireFunction(function).apply(value1));
     }
 
-    public <R1, E extends Exception> Unit<R1> mapAll(Function1<T1, Unit<R1>, E> function) throws E {
+    public <R1, E extends Exception> Unit<R1> mapTuple(Function1<T1, Unit<R1>, E> function) throws E {
         return Exceptions.requireFunction(function).apply(value1);
     }
 
     public <T2, E extends Exception> Tuple<T1, T2> unfold(Function1<T1, T2, E> function) throws E {
+        return unfoldBy(Unit::first, function);
+    }
+
+    public <TX, T2, E extends Exception> Tuple<T1, T2> unfoldBy(Function1<T1, TX, E> selector, Function1<TX, T2, E> function) throws E {
         T2 value2 = null;
-        if (value1 != null) {
-            value2 = Exceptions.requireFunction(function).apply(value1);
+        TX selected = Exceptions.requireSelector(selector).apply(value1);
+        if (selected != null) {
+            value2 = Exceptions.requireFunction(function).apply(selected);
         }
         return Tuple.of(value1, value2);
     }

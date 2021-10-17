@@ -35,6 +35,31 @@ public class Tuple5<T1, T2, T3, T4, T5> implements Value5<T1, T2, T3, T4, T5> {
         this.value5 = value5;
     }
 
+    public <R, E extends Exception> Tuple5<R, T2, T3, T4, T5> map1(Function1<T1, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value1);
+        return Tuple5.of(result, value2, value3, value4, value5);
+    }
+
+    public <R, E extends Exception> Tuple5<T1, R, T3, T4, T5> map2(Function1<T2, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value2);
+        return Tuple5.of(value1, result, value3, value4, value5);
+    }
+
+    public <R, E extends Exception> Tuple5<T1, T2, R, T4, T5> map3(Function1<T3, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value3);
+        return Tuple5.of(value1, value2, result, value4, value5);
+    }
+
+    public <R, E extends Exception> Tuple5<T1, T2, T3, R, T5> map4(Function1<T4, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value4);
+        return Tuple5.of(value1, value2, value3, result, value5);
+    }
+
+    public <R, E extends Exception> Tuple5<T1, T2, T3, T4, R> map5(Function1<T5, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value5);
+        return Tuple5.of(value1, value2, value3, value4, result);
+    }
+
     public <TX, T6, E extends Exception> Tuple6<T1, T2, T3, T4, T5, T6> unfoldBy(Function5<T1, T2, T3, T4, T5, TX, E> modifier,
                                                                                  Function1<TX, T6, E> function) throws E {
         T6 value6 = null;
@@ -44,7 +69,6 @@ public class Tuple5<T1, T2, T3, T4, T5> implements Value5<T1, T2, T3, T4, T5> {
         }
         return Tuple6.of(value1, value2, value3, value4, value5, value6);
     }
-
 
     public <E extends Exception> Tuple5<T1, T2, T3, T4, T5> ifPresent(Consumer5<T1, T2, T3, T4, T5, E> consumer) throws E {
         return ifPredicate(Value5::isPresent, consumer);

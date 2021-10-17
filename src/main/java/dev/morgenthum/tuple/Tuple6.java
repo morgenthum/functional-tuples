@@ -1,6 +1,7 @@
 package dev.morgenthum.tuple;
 
 import dev.morgenthum.tuple.function.Consumer6;
+import dev.morgenthum.tuple.function.Function1;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -34,6 +35,36 @@ public class Tuple6<T1, T2, T3, T4, T5, T6> implements Value6<T1, T2, T3, T4, T5
         this.value4 = value4;
         this.value5 = value5;
         this.value6 = value6;
+    }
+
+    public <R, E extends Exception> Tuple6<R, T2, T3, T4, T5, T6> map1(Function1<T1, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value1);
+        return Tuple6.of(result, value2, value3, value4, value5, value6);
+    }
+
+    public <R, E extends Exception> Tuple6<T1, R, T3, T4, T5, T6> map2(Function1<T2, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value2);
+        return Tuple6.of(value1, result, value3, value4, value5, value6);
+    }
+
+    public <R, E extends Exception> Tuple6<T1, T2, R, T4, T5, T6> map3(Function1<T3, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value3);
+        return Tuple6.of(value1, value2, result, value4, value5, value6);
+    }
+
+    public <R, E extends Exception> Tuple6<T1, T2, T3, R, T5, T6> map4(Function1<T4, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value4);
+        return Tuple6.of(value1, value2, value3, result, value5, value6);
+    }
+
+    public <R, E extends Exception> Tuple6<T1, T2, T3, T4, R, T6> map5(Function1<T5, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value5);
+        return Tuple6.of(value1, value2, value3, value4, result, value6);
+    }
+
+    public <R, E extends Exception> Tuple6<T1, T2, T3, T4, T5, R> map6(Function1<T6, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value6);
+        return Tuple6.of(value1, value2, value3, value4, value5, result);
     }
 
     public <E extends Exception> Tuple6<T1, T2, T3, T4, T5, T6> ifPresent(Consumer6<T1, T2, T3, T4, T5, T6, E> consumer) throws E {

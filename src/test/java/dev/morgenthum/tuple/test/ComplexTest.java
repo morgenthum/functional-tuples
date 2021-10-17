@@ -45,12 +45,12 @@ public class ComplexTest {
         Order exampleOrder = buildCrossfieldValidationOrder();
 
         Unit.of(exampleOrder)
-            .unfold(Order::getCustomer)
-            .unfoldBy((order, customer) -> customer, Customer::getNumber)
-            .unfoldBy((order, customer, s) -> customer, Customer::getAddress)
-            .unfoldBy((order, customer, s, address) -> address, Address::getCity)
-            .ifPresent((order, customer, customerNumber, address, city) -> {
-                valid.set("1337".equals(customerNumber) && "Coburg".equals(city));
+            .map1(Order::getCustomer)
+            .unfold(Customer::getAddress)
+            .map1(Customer::getNumber)
+            .map2(Address::getCity)
+            .ifPresent((customerNo, city) -> {
+                valid.set("1337".equals(customerNo) && "Coburg".equals(city));
             });
 
         Assertions.assertTrue(valid.get());

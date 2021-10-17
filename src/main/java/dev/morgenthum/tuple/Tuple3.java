@@ -31,6 +31,21 @@ public class Tuple3<T1, T2, T3> implements Value3<T1, T2, T3> {
         this.value3 = value3;
     }
 
+    public <R, E extends Exception> Tuple3<R, T2, T3> map1(Function1<T1, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value1);
+        return Tuple3.of(result, value2, value3);
+    }
+
+    public <R, E extends Exception> Tuple3<T1, R, T3> map2(Function1<T2, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value2);
+        return Tuple3.of(value1, result, value3);
+    }
+
+    public <R, E extends Exception> Tuple3<T1, T2, R> map3(Function1<T3, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value3);
+        return Tuple3.of(value1, value2, result);
+    }
+
     public <T4, E extends Exception> Tuple4<T1, T2, T3, T4> unfold(Function1<T3, T4, E> function) throws E {
         return unfoldBy(Tuple3::last, function);
     }

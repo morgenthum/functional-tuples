@@ -33,14 +33,14 @@ public class Tuple<T1, T2> implements Value2<T1, T2> {
         return Tuple.of(value2, value1);
     }
 
-    public <R1, E extends Exception> Tuple<R1, T2> map1(Function1<T1, R1, E> function) throws E {
-        R1 result1 = Exceptions.requireFunction(function).apply(value1);
-        return Tuple.of(result1, value2);
+    public <R, E extends Exception> Tuple<R, T2> map1(Function1<T1, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value1);
+        return Tuple.of(result, value2);
     }
 
-    public <R2, E extends Exception> Tuple<T1, R2> map2(Function1<T2, R2, E> function) throws E {
-        R2 result2 = Exceptions.requireFunction(function).apply(value2);
-        return Tuple.of(value1, result2);
+    public <R, E extends Exception> Tuple<T1, R> map2(Function1<T2, R, E> function) throws E {
+        R result = Exceptions.requireFunction(function).apply(value2);
+        return Tuple.of(value1, result);
     }
 
     public <R1, R2, E extends Exception> Tuple<R1, R2> map(Function2<T1, T2, Tuple<R1, R2>, E> function) throws E {
