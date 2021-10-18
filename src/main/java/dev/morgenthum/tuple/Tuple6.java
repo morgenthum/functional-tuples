@@ -8,11 +8,6 @@ import java.util.function.Predicate;
 
 public class Tuple6<T1, T2, T3, T4, T5, T6> implements Value6<T1, T2, T3, T4, T5, T6> {
 
-    public static <T1, T2, T3, T4, T5, T6> Tuple6<T1, T2, T3, T4, T5, T6> of(T1 value1, T2 value2, T3 value3, T4 value4,
-                                                                             T5 value5, T6 value6) {
-        return new Tuple6<>(value1, value2, value3, value4, value5, value6);
-    }
-
     public static <T1, T2, T3, T4, T5, T6> T1 first(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6) {
         return value1;
     }
@@ -28,7 +23,7 @@ public class Tuple6<T1, T2, T3, T4, T5, T6> implements Value6<T1, T2, T3, T4, T5
     private final T5 value5;
     private final T6 value6;
 
-    private Tuple6(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6) {
+    Tuple6(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -39,48 +34,47 @@ public class Tuple6<T1, T2, T3, T4, T5, T6> implements Value6<T1, T2, T3, T4, T5
 
     public <R, E extends Exception> Tuple6<R, T2, T3, T4, T5, T6> map1(Function1<T1, R, E> function) throws E {
         R result = value1 == null ? null : Exceptions.requireFunction(function).apply(value1);
-        return Tuple6.of(result, value2, value3, value4, value5, value6);
+        return Tuple.of(result, value2, value3, value4, value5, value6);
     }
 
     public <R, E extends Exception> Tuple6<T1, R, T3, T4, T5, T6> map2(Function1<T2, R, E> function) throws E {
         R result = value2 == null ? null : Exceptions.requireFunction(function).apply(value2);
-        return Tuple6.of(value1, result, value3, value4, value5, value6);
+        return Tuple.of(value1, result, value3, value4, value5, value6);
     }
 
     public <R, E extends Exception> Tuple6<T1, T2, R, T4, T5, T6> map3(Function1<T3, R, E> function) throws E {
         R result = value3 == null ? null : Exceptions.requireFunction(function).apply(value3);
-        return Tuple6.of(value1, value2, result, value4, value5, value6);
+        return Tuple.of(value1, value2, result, value4, value5, value6);
     }
 
     public <R, E extends Exception> Tuple6<T1, T2, T3, R, T5, T6> map4(Function1<T4, R, E> function) throws E {
         R result = value4 == null ? null : Exceptions.requireFunction(function).apply(value4);
-        return Tuple6.of(value1, value2, value3, result, value5, value6);
+        return Tuple.of(value1, value2, value3, result, value5, value6);
     }
 
     public <R, E extends Exception> Tuple6<T1, T2, T3, T4, R, T6> map5(Function1<T5, R, E> function) throws E {
         R result = value5 == null ? null : Exceptions.requireFunction(function).apply(value5);
-        return Tuple6.of(value1, value2, value3, value4, result, value6);
+        return Tuple.of(value1, value2, value3, value4, result, value6);
     }
 
     public <R, E extends Exception> Tuple6<T1, T2, T3, T4, T5, R> map6(Function1<T6, R, E> function) throws E {
         R result = value6 == null ? null : Exceptions.requireFunction(function).apply(value6);
-        return Tuple6.of(value1, value2, value3, value4, value5, result);
+        return Tuple.of(value1, value2, value3, value4, value5, result);
     }
 
-    public <E extends Exception> Tuple6<T1, T2, T3, T4, T5, T6> ifPresent(Consumer6<T1, T2, T3, T4, T5, T6, E> consumer) throws E {
-        return ifPredicate(Value5::isPresent, consumer);
+    public <E extends Exception> void ifPresent(Consumer6<T1, T2, T3, T4, T5, T6, E> consumer) throws E {
+        ifPredicate(Value5::isPresent, consumer);
     }
 
-    public <E extends Exception> Tuple6<T1, T2, T3, T4, T5, T6> ifPartiallyPresent(Consumer6<T1, T2, T3, T4, T5, T6, E> consumer) throws E {
-        return ifPredicate(Value2::isPartiallyPresent, consumer);
+    public <E extends Exception> void ifPartiallyPresent(Consumer6<T1, T2, T3, T4, T5, T6, E> consumer) throws E {
+        ifPredicate(Value2::isPartiallyPresent, consumer);
     }
 
-    public <E extends Exception> Tuple6<T1, T2, T3, T4, T5, T6> ifPredicate(Predicate<Tuple6<T1, T2, T3, T4, T5, T6>> predicate,
+    public <E extends Exception> void ifPredicate(Predicate<Tuple6<T1, T2, T3, T4, T5, T6>> predicate,
                                                                             Consumer6<T1, T2, T3, T4, T5, T6, E> consumer) throws E {
         if (predicate.test(this)) {
             Exceptions.requireConsumer(consumer).accept(getValue1(), getValue2(), getValue3(), getValue4(), getValue5(), getValue6());
         }
-        return this;
     }
 
     @Override

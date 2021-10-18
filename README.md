@@ -38,11 +38,11 @@ follow.
 There is functional-tuples to help us out:
 
 ```java
-Unit.of(order) // Unit<Order>
-    .map1(Order::getCustomer) // Unit<Customer>
-    .unfold(Customer::getAddress) // Tuple<Customer, Address>
-    .map1(Customer::getNumber) // Tuple<String, Address>
-    .map2(Address::getCity) // Tuple<String, String>
+Tuple.of(order) // Tuple1<Order>
+    .map1(Order::getCustomer) // Tuple1<Customer>
+    .unfold(Customer::getAddress) // Tuple2<Customer, Address>
+    .map1(Customer::getNumber) // Tuple2<String, Address>
+    .map2(Address::getCity) // Tuple2<String, String>
     .ifPresent((customerNo, city) -> {
         // Do something (like validation)
     });
@@ -50,11 +50,11 @@ Unit.of(order) // Unit<Order>
 
 So what's going on here? Let's go through each line step by step:
 
-* Wrap the `Order`-object into `Unit`, which is a tuple with one component.
-* Map the first component (which is the only one in `Unit`) to `Customer` using `map1`.
-* Turn the `Unit` into `Tuple` (two elements) by using `unfold`, which maps the
-    rightmost component of `Unit` over a given function, and appends its result.
-* We use `map1` over the `Tuple` to map the `Customer` to the `number`-Field
+* Wrap the `Order`-object into `Tuple1`, which is a tuple with one component.
+* Map the first component (which is the only one in `Tuple1`) to `Customer` using `map1`.
+* Turn the `Tuple1` into `Tuple2` (two elements) by using `unfold`, which maps the
+    rightmost component of `Tuple1` over a given function, and appends its result.
+* We use `map1` over the `Tuple2` to map the `Customer` to the `number`-Field
     in the first component.
 * Apply `map2` over the `Tuple` to map the `Address` to the `city`-Field
     in the second component.
@@ -70,9 +70,7 @@ What's the deal with it? The big advantages are:
 
 ### Lightweight tuples with 1 to 6 components
 
-* `Unit<T>`
-* `Tuple<T1, T2>`
-* `Tuple3<T1, T2, T3` to `Tuple6<T1, T2, T3, T4, T5, T6>`
+`Tuple1<T1>` to `Tuple6<T1, T2, T3, T4, T5, T6>`
 
 ### Supports Exceptions
 
@@ -93,8 +91,3 @@ try {
     // ...
 }
 ```
-
-
-
-
-

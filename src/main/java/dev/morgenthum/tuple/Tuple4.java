@@ -9,10 +9,6 @@ import java.util.function.Predicate;
 
 public class Tuple4<T1, T2, T3, T4> implements Value4<T1, T2, T3, T4> {
 
-    public static <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> of(T1 value1, T2 value2, T3 value3, T4 value4) {
-        return new Tuple4<>(value1, value2, value3, value4);
-    }
-
     public static <T1, T2, T3, T4> T1 first(T1 value1, T2 value2, T3 value3, T4 value4) {
         return value1;
     }
@@ -26,31 +22,35 @@ public class Tuple4<T1, T2, T3, T4> implements Value4<T1, T2, T3, T4> {
     private final T3 value3;
     private final T4 value4;
 
-    private Tuple4(T1 value1, T2 value2, T3 value3, T4 value4) {
+    Tuple4(T1 value1, T2 value2, T3 value3, T4 value4) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
         this.value4 = value4;
     }
 
+    public <T5> Tuple5<T1, T2, T3, T4, T5> add(T5 value5) {
+        return Tuple.of(value1, value2, value3, value4, value5);
+    }
+
     public <R, E extends Exception> Tuple4<R, T2, T3, T4> map1(Function1<T1, R, E> function) throws E {
         R result = value1 == null ? null : Exceptions.requireFunction(function).apply(value1);
-        return Tuple4.of(result, value2, value3, value4);
+        return Tuple.of(result, value2, value3, value4);
     }
 
     public <R, E extends Exception> Tuple4<T1, R, T3, T4> map2(Function1<T2, R, E> function) throws E {
         R result = value2 == null ? null : Exceptions.requireFunction(function).apply(value2);
-        return Tuple4.of(value1, result, value3, value4);
+        return Tuple.of(value1, result, value3, value4);
     }
 
     public <R, E extends Exception> Tuple4<T1, T2, R, T4> map3(Function1<T3, R, E> function) throws E {
         R result = value3 == null ? null : Exceptions.requireFunction(function).apply(value3);
-        return Tuple4.of(value1, value2, result, value4);
+        return Tuple.of(value1, value2, result, value4);
     }
 
     public <R, E extends Exception> Tuple4<T1, T2, T3, R> map4(Function1<T4, R, E> function) throws E {
         R result = value4 == null ? null : Exceptions.requireFunction(function).apply(value4);
-        return Tuple4.of(value1, value2, value3, result);
+        return Tuple.of(value1, value2, value3, result);
     }
 
     public <T5, E extends Exception> Tuple5<T1, T2, T3, T4, T5> unfold(Function1<T4, T5, E> function) throws E {
@@ -64,23 +64,22 @@ public class Tuple4<T1, T2, T3, T4> implements Value4<T1, T2, T3, T4> {
         if (temp != null) {
             value5 = Exceptions.requireFunction(function).apply(temp);
         }
-        return Tuple5.of(value1, value2, value3, value4, value5);
+        return Tuple.of(value1, value2, value3, value4, value5);
     }
 
-    public <E extends Exception> Tuple4<T1, T2, T3, T4> ifPresent(Consumer4<T1, T2, T3, T4, E> consumer) throws E {
-        return ifPredicate(Value4::isPresent, consumer);
+    public <E extends Exception> void ifPresent(Consumer4<T1, T2, T3, T4, E> consumer) throws E {
+        ifPredicate(Value4::isPresent, consumer);
     }
 
-    public <E extends Exception> Tuple4<T1, T2, T3, T4> ifPartiallyPresent(Consumer4<T1, T2, T3, T4, E> consumer) throws E {
-        return ifPredicate(Value2::isPartiallyPresent, consumer);
+    public <E extends Exception> void ifPartiallyPresent(Consumer4<T1, T2, T3, T4, E> consumer) throws E {
+        ifPredicate(Value2::isPartiallyPresent, consumer);
     }
 
-    public <E extends Exception> Tuple4<T1, T2, T3, T4> ifPredicate(Predicate<Tuple4<T1, T2, T3, T4>> predicate,
+    public <E extends Exception> void ifPredicate(Predicate<Tuple4<T1, T2, T3, T4>> predicate,
                                                                     Consumer4<T1, T2, T3, T4, E> consumer) throws E {
         if (predicate.test(this)) {
             Exceptions.requireConsumer(consumer).accept(getValue1(), getValue2(), getValue3(), getValue4());
         }
-        return this;
     }
 
     @Override

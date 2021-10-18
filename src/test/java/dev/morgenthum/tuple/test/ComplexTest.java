@@ -1,6 +1,6 @@
 package dev.morgenthum.tuple.test;
 
-import dev.morgenthum.tuple.Unit;
+import dev.morgenthum.tuple.Tuple;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -44,11 +44,11 @@ public class ComplexTest {
 
         Order exampleOrder = buildCrossfieldValidationOrder();
 
-        Unit.of(exampleOrder) // Unit<Order>
-            .map1(Order::getCustomer) // Unit<Customer>
-            .unfold(Customer::getAddress) // Tuple<Customer, Address>
-            .map1(Customer::getNumber) // Tuple<String, Address>
-            .map2(Address::getCity) // Tuple<String, String>
+        Tuple.of(exampleOrder) // Tuple1<Order>
+            .map1(Order::getCustomer) // Tuple1<Customer>
+            .unfold(Customer::getAddress) // Tuple2<Customer, Address>
+            .map1(Customer::getNumber) // Tuple2<String, Address>
+            .map2(Address::getCity) // Tuple2<String, String>
             .ifPresent((customerNo, city) -> {
                 valid.set("1337".equals(customerNo) && "Coburg".equals(city));
             });
